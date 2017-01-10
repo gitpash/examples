@@ -1,0 +1,93 @@
+<html>
+<head>
+  <style>
+    .row div {
+
+        height: 5px;
+        margin: 2px;
+        display: inline-block;
+        width: 5px;
+    }
+    .row div.active { /* создаем класс для активных клеток*/
+      background-color: red;
+    }
+    .row div.inactive { /* создаем класс для НЕ-активных клеток*/
+      background-color: #99CCFF;
+    }
+  </style>
+</head>
+<body>
+  <div class="automata">
+    <div class="row"></div>
+  </div>
+  <script>
+    function randomBinary() {
+      let max = 1
+      let min = 0
+      return Math.floor(
+        Math.random() * (max - min + 1)
+      )
+    }
+
+    for (let i = 0; i < 101; i++) {
+      let div = document.createElement('div')
+      document.querySelector('.row').appendChild(div)
+    }
+
+    function randomizeRow(rowDiv) {
+      for (let i = 0; i < rowDiv.childNodes.length; i++) {
+        let div = rowDiv.childNodes[i]
+        div.classList
+          .add(randomBinary() ? 'active' : 'inactive')
+      }
+    }
+    randomizeRow(document.querySelector('.row'))
+
+    function duplicateRow() {
+      let allRows = document.querySelectorAll('.row')
+      let lastRow = allRows[allRows.length - 1]
+      let clone = lastRow.cloneNode(true)
+      document
+      .querySelector('.automata')
+      .appendChild(clone)
+    processRow(clone, lastRow)
+
+    }
+    duplicateRow()
+    function processRow(rowDiv, parentRowDiv) {
+      for (let i = 0; i < rowDiv.childNodes.length; i++) {
+        let target = rowDiv.childNodes[i]
+        let prevSelf = parentRowDiv.childNodes[i]
+        let leftSibling =
+          prevSelf.previousElementSibling ||
+            parentRowDiv.childNodes[
+              parentRowDiv.childNodes.length - 1]
+        let rightSibling =
+          prevSelf.nextElementSibling ||
+            parentRowDiv.childNodes[0]
+
+          if (
+              isActive(leftSibling) && /* проверка первого правила для */
+              isActive(prevSelf) && /* для rule 73 atlas.wolfram.com */
+              isActive(rightSibling)
+          ) {
+            setIsActive(target, false)
+          }
+      }
+    }
+
+    function isActive(cellDiv) {
+      return cellDiv.classList.contains('active')
+    }
+    function setIsActive(cellDiv, isActive) {
+      if (!!isActive) {
+        cellDiv.classList.remove('inactive')
+        cellDiv.classList.add('active')
+      } else {
+        cellDiv.classList.remove('active')
+        cellDiv.classList.add('inactive')
+      }
+    }
+  </script>
+</body>
+</html>
