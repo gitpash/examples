@@ -3,10 +3,9 @@
   <style>
     .row div {
 
-        height: 5px;
-        margin: 2px;
+        height: 4px;
         display: inline-block;
-        width: 5px;
+        width: 4px;
     }
     .row div.active { /* создаем класс для активных клеток*/
       background-color: red;
@@ -53,7 +52,7 @@
     processRow(clone, lastRow)
 
     }
-    duplicateRow()
+
     function processRow(rowDiv, parentRowDiv) {
       for (let i = 0; i < rowDiv.childNodes.length; i++) {
         let target = rowDiv.childNodes[i]
@@ -66,18 +65,69 @@
           prevSelf.nextElementSibling ||
             parentRowDiv.childNodes[0]
 
-          if (
-              isActive(leftSibling) && /* проверка первого правила для */
-              isActive(prevSelf) && /* для rule 73 atlas.wolfram.com */
-              isActive(rightSibling)
-          ) {
-            setIsActive(target, false)
-          }
+            // первое правило
+            let toggleClass = setActiveIfMatchesRule // вспомогательная функция добавляющая
+                          // все аргумены, чтобы вызывать только rule
+              .bind(
+                null,
+                target,
+                leftSibling,
+                prevSelf,
+                rightSibling
+              )
+
+            toggleClass([1, 1, 1], false)
+            toggleClass([1, 1, 0], true)
+            toggleClass([1, 0, 1], false)
+            toggleClass([1, 0, 0], false)
+            toggleClass([0, 1, 1], true)
+            toggleClass([0, 1, 0], false)
+            toggleClass([0, 0, 1], false)
+            toggleClass([0, 0, 0], true)
+
+
+        //   if (
+        //       isActive(leftSibling) && // проверка первого правила для */
+        //       isActive(prevSelf) && // для rule 73 atlas.wolfram.com */
+        //       isActive(rightSibling)
+        //   ) {
+        //     setIsActive(target, false) // изменение состояния целевой(target) ячейки
+        // } else if ( // второе правило по аналогии с первым
+        //       isActive(leftSibling) &&
+        //       isActive(prevSelf) &&
+        //       !isActive(rightSibling)
+        //   ) {
+        //     setIsActive(target, true) // changing target state to active
+        // } else if (
+        //       isActive(leftSibling) &&
+        //       !isActive(prevSelf) &&
+        //       isActive(rightSibling)
+        //   ) {
+        //     setIsActive(target, false)
+        //   }
       }
     }
 
-    function isActive(cellDiv) {
-      return cellDiv.classList.contains('active')
+    // рефакторинг_ФП)) напишем функцию, которая берет аргументами
+    // ячейки и правило в виде бинарного массива
+
+    function setActiveIfMatchesRule(target,
+      leftSibling,
+      prevSelf,
+      rightSibling,
+      rule,
+      ruleValue
+    ) {
+      let matchesRule =
+        state(leftSibling) === rule[0] &&
+        state(prevSelf) === rule[1] &&
+        state(rightSibling) == rule[2]
+      if(matchesRule)
+          setIsActive(target, ruleValue)
+    }
+
+    function state(cellDiv) {
+      return cellDiv.classList.contains('active') ? 1 : 0 // в зависимости от состояния возвращает 1 или 0
     }
     function setIsActive(cellDiv, isActive) {
       if (!!isActive) {
@@ -88,6 +138,9 @@
         cellDiv.classList.add('inactive')
       }
     }
+
+    // сделаем заполнение страницы копией ряда с рандомом
+    setInterval(duplicateRow, 100)
   </script>
 </body>
 </html>
