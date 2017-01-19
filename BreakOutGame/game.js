@@ -36,18 +36,27 @@ let brickHeight = 20
 let brickPadding = 10
 let brickOffsetTop = 30
 let brickOffsetLeft = 30
+let score = 0
 
 let bricks = [] // двумерный массив блоков
 for (c = 0; c < brickColumnCount; c++) { // содержит колонны
   bricks[c] = []
   for (r = 0; r < brickRowCount; r++) { // колонны содержат ряды
     bricks[c][r] = { x: 0, // ряд содердит объект с координатами
-                     y: 0 }
+                     y: 0,
+                     status: 1 } // это для столкновений
   }
 }
 document.addEventListener("keydown", keyDownHandler, false)
 document.addEventListener("keyup", KeyUpHandler, false)
+document.addEventListener("mousemove", mouseMoveHandler, false)
 
+function mouseMoveHandler(e) {
+  let relativeX = e.clientX - canvas.offsetLeft // зададим гориз позицию как разницу между позицией указателя и левым краем канваса
+  if(relativeX > 0 && relativeX < canvas.width) { // если это значение от 0 до ширины канваса - значит указатель внутри канваса
+    paddleX = relativeX - paddleWidth / 2 // тогда координаты площадки соответствуют
+  }
+}
 
 
 
@@ -72,7 +81,33 @@ function KeyUpHandler(e) {
     leftPressed = false
   }
 }
-// рисуем мяч
+
+// определяем столкновение с блоком(пока тупым методом по коорд центра мяча)
+function collisionDetection() {
+  for(c = 0; c < brickColumnCount; c++) {
+    for(r = 0; r < brickRowCount; r++) {
+      let b = bricks[c][r]
+      if (bricks[c][r].status == 1)
+      if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y +brickHeight) {
+        dy = -dy //отскок
+        b.status = 0 //статус блока 0 (не отрисовывается)
+        score++ // счет увел на 1
+        if (score == brickRowCount * brickColumnCount) {
+          alert('You killed them all and stay alone in whole world, lacky you!')
+          document.location.reload()
+        }
+      }
+    }
+  }
+}
+
+// отображение счета
+function drawScore() {
+  ctx.font = '16px Arial'
+  ctx.fillStyle = '#0095DD'
+  ctx.fillText('DeadBricks: ' + score, 8, 20) // текст переменная и координаты
+}
+// функция рисует мяч
 function drawBall() {
   ctx.beginPath()
   ctx.arc(x, y, ballRadius, 0, Math.PI*2) //1 и 2 - координаты центра, 3я-радиус, 4и5 начальный/конечный угол отрисовки
@@ -94,6 +129,7 @@ function drawPaddle() {
 function drawBricks() {
   for (c = 0; c < brickColumnCount; c++) {
     for (r = 0; r < brickRowCount; r++) {
+      if (bricks[c][r].status == 1) { // если статус 1 то рисуем блок
       // определяем коорд. блока по Х это его ширина+отступ между блоками помн. номер колонны + отступ от слева
       let brickX = (c * (brickWidth + brickPadding)) + brickOffsetLeft
       // коорд. по У это высота+отступ между помн. на номер строки + отступ сверху
@@ -106,9 +142,9 @@ function drawBricks() {
       ctx.fillStyle = "#0095DD"
       ctx.fill()
       ctx.closePath()
-
     }
   }
+ }
 }
 // отрисовка игрового поля
 function draw() {
@@ -116,7 +152,8 @@ function draw() {
   drawBricks() // рисуем кирпичи                                               //1 и 2 коорд. левого верхнего угла и 3 и 4 коорд. правого нижнего
   drawBall() // рисуем мяч
   drawPaddle() // рисуем площадку
-
+  collisionDetection()
+  drawScore()
   //условие отскока от левого и правого краев
   if(x + dx > (canvas.width - ballRadius) || x + dx < ballRadius) {
     dx = -dx
@@ -136,7 +173,7 @@ function draw() {
     }
     // если мяч касается нижнего края - выводим алерт
     else {
-    alert('Ooops! Something went wrong...')
+    alert('Ooops! Something went wrong...' + 'you killed just ' + score + ' of them'   )
     document.location.reload()// перезагружаем страницу
   }
 }
