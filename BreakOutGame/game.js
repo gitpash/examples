@@ -21,8 +21,8 @@ const ctx = canvas.getContext('2d') // для рисования канвасо�
 // ctx.closePath()
 let x = canvas.width / 2
 let y = canvas.height - 30
-let dx = 2
-let dy = -2
+let dx = 3
+let dy = -3
 const ballRadius = 10
 let paddleHeight = 10
 let paddleWidth = 75
@@ -30,13 +30,27 @@ let paddleX = (canvas.width-paddleWidth)/2
 let rightPressed = false
 let leftPressed = false
 let brickRowCount = 3
-let brickColumnCount = 5
+let brickColumnCount = 6
 let brickWidth = 75
 let brickHeight = 20
 let brickPadding = 10
 let brickOffsetTop = 30
-let brickOffsetLeft = 30
+let brickOffsetLeft = 50
 let score = 0
+let lives = 3
+
+// случайный цвет
+// let randomColor
+// function getRandomColor() {
+//   let max = 254
+//   red = Math.floor(Math.random() * max)
+//   green = Math.floor(Math.random() * max)
+//   blue = Math.floor(Math.random() * max)
+//   randomColor = "rgb(" + red + ", " + green + ", " + blue + ")"
+//   return randomColor
+// }
+// //console.log(randomColor);
+
 
 let bricks = [] // двумерный массив блоков
 for (c = 0; c < brickColumnCount; c++) { // содержит колонны
@@ -82,6 +96,9 @@ function KeyUpHandler(e) {
   }
 }
 
+
+
+
 // определяем столкновение с блоком(пока тупым методом по коорд центра мяча)
 function collisionDetection() {
   for(c = 0; c < brickColumnCount; c++) {
@@ -103,16 +120,26 @@ function collisionDetection() {
 
 // отображение счета
 function drawScore() {
-  ctx.font = '16px Arial'
-  ctx.fillStyle = '#0095DD'
+  ctx.font = '15px serif'
+  ctx.fillStyle = 'maroon'
   ctx.fillText('DeadBricks: ' + score, 8, 20) // текст переменная и координаты
+}
+
+// ф-я для счетчика жизней
+function drawLives() {
+  ctx.font = '16px serif'
+  ctx.fillStyle = 'maroon'
+  ctx.fillText('Lives: ' + lives, canvas.width-65, 20)
 }
 // функция рисует мяч
 function drawBall() {
+  // if (random_color.checked) {
+  //   getRandomColor()
+  // }
   ctx.beginPath()
   ctx.arc(x, y, ballRadius, 0, Math.PI*2) //1 и 2 - координаты центра, 3я-радиус, 4и5 начальный/конечный угол отрисовки
                                             // в радианах, направление отрисовки(false по часовой и true против) опционально
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = 'brown'
   ctx.fill()
   ctx.closePath()
 }
@@ -120,7 +147,7 @@ function drawBall() {
 function drawPaddle() {
   ctx.beginPath()
   ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight)
-  ctx.fillStyle = "#0095DD"
+  ctx.fillStyle = 'chocolate'
   ctx.fill()
   ctx.closePath()
 }
@@ -139,7 +166,7 @@ function drawBricks() {
       bricks[c][r].y = brickY
       ctx.beginPath()// отрисовываем полученые блоки канвасом
       ctx.rect(brickX, brickY, brickWidth, brickHeight)
-      ctx.fillStyle = "#0095DD"
+      ctx.fillStyle = 'coral'
       ctx.fill()
       ctx.closePath()
     }
@@ -154,6 +181,7 @@ function draw() {
   drawPaddle() // рисуем площадку
   collisionDetection()
   drawScore()
+  drawLives()
   //условие отскока от левого и правого краев
   if(x + dx > (canvas.width - ballRadius) || x + dx < ballRadius) {
     dx = -dx
@@ -173,9 +201,20 @@ function draw() {
     }
     // если мяч касается нижнего края - выводим алерт
     else {
-    alert('Ooops! Something went wrong...' + 'you killed just ' + score + ' of them'   )
+      lives--
+      if(!lives) {
+    alert('Ooops! Something went wrong...your Game is Over, but ' + 'you killed ' + score + ' of them'   )
     document.location.reload()// перезагружаем страницу
   }
+    else {
+      x = canvas.width/2
+      y = canvas.height-30
+      dx = 3
+      dy = -3
+      paddleX = (canvas.width - paddleWidth)/2
+    }
+ }
+
 }
   // движение площадки в рамках окна канваса
   if(rightPressed && paddleX < canvas.width - paddleWidth) {
@@ -187,6 +226,7 @@ function draw() {
   x += dx
   y += dy
 
+requestAnimationFrame(draw)//заменяет собой setInterval передавая отрисовку канваса браузеру по усмотрению
 }
 
-setInterval(draw, 10)
+draw()

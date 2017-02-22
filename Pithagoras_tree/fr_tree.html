@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Pythagorean tree</title>
+  <style>
+    * { padding: 0; margin: 0; }
+    canvas {  background: Bisque;
+              display: block;
+              margin: 0 auto;
+            }
+  </style>
+</head>
+<body>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById('canvas')// связываем id canas и  const canvas
+const ctx = canvas.getContext('2d')
+let angle = (Math.PI / 5)
+
+function draw() {
+
+    ctx.translate(200, 400)
+    drawBranch(100)
+    ctx.stroke()
+
+
+
+}
+function drawBranch(len) {
+  ctx.moveTo(0, 0) //смещаемся в начало координат без отрисовки
+  ctx.lineTo(0, -len) // рисуем вертикаль
+  ctx.translate(0, -len) // смещаем точку отсчета в конец линии
+
+  if (len > 4) {
+    ctx.save() // сохр состояние
+    ctx.rotate(angle) // поворот на заданный угол
+    drawBranch(len*0.67) // след ветка короче на треть
+    ctx.restore() // возвращ исходное
+// отзеркаливаем
+    ctx.save()
+    ctx.rotate(-angle)
+    drawBranch(len*0.67)
+    ctx.restore()
+  }
+}
+
+draw()
+</script>
+</body>
+</html>
