@@ -1,25 +1,31 @@
 <html>
 <head>
   <style>
-    .row div {
 
-        height: 4px;
+    .row div {
+        background-color: #99ff99;
         display: inline-block;
-        width: 4px;
+        height: 8px;
+        width: 8px;
+        /*margin: 0.1rem;*/
     }
+
     .row div.active { /* создаем класс для активных клеток*/
-      background-color: red;
+      background-color: #8B7E66;
     }
     .row div.inactive { /* создаем класс для НЕ-активных клеток*/
-      background-color: #99CCFF;
+      background-color: #8B3626;
     }
   </style>
 </head>
 <body>
-  <div class="automata">
+  <div class="drawBlock">
+  <div class="automata"> <!--wrapper используем для добавления нового ряда к существующему -->
     <div class="row"></div>
   </div>
+  </div>
   <script>
+    // функция рандомно возвращает 1 или 0
     function randomBinary() {
       let max = 1
       let min = 0
@@ -27,21 +33,22 @@
         Math.random() * (max - min + 1)
       )
     }
-
+    // добавляем на старницу 101 div
     for (let i = 0; i < 101; i++) {
       let div = document.createElement('div')
       document.querySelector('.row').appendChild(div)
     }
-
-    function randomizeRow(rowDiv) {
-      for (let i = 0; i < rowDiv.childNodes.length; i++) {
-        let div = rowDiv.childNodes[i]
-        div.classList
-          .add(randomBinary() ? 'active' : 'inactive')
+      // проходим всю длинну ряда и каждому блоку добавляем свойство 1 или 0
+      function randomizeRow(rowDiv) {
+        for (let i=0; i < rowDiv.childNodes.length; i++) {
+          let div = rowDiv.childNodes[i]
+          div.classList
+            .add(randomBinary() ? 'active' : 'inactive')
       }
     }
-    randomizeRow(document.querySelector('.row'))
 
+    randomizeRow(document.querySelector('.row'))
+    //
     function duplicateRow() {
       let allRows = document.querySelectorAll('.row')
       let lastRow = allRows[allRows.length - 1]
@@ -52,7 +59,7 @@
     processRow(clone, lastRow)
 
     }
-
+    // получает предыдущий ряд и текущий и связывает пред/центр/след клетки с соотв элементами ряда
     function processRow(rowDiv, parentRowDiv) {
       for (let i = 0; i < rowDiv.childNodes.length; i++) {
         let target = rowDiv.childNodes[i]
@@ -64,10 +71,9 @@
         let rightSibling =
           prevSelf.nextElementSibling ||
             parentRowDiv.childNodes[0]
-
-            // первое правило
-            let toggleClass = setActiveIfMatchesRule // вспомогательная функция добавляющая
-                          // все аргумены, чтобы вызывать только rule
+   
+            // правила // вспомогательная функция добавляющая // все аргумены, чтобы вызывать только rule
+            let toggleClass = setActiveIfMatchesRule
               .bind(
                 null,
                 target,
@@ -75,38 +81,39 @@
                 prevSelf,
                 rightSibling
               )
-
-            toggleClass([1, 1, 1], false)
+                  // 210
+            toggleClass([1, 1, 1], true)
             toggleClass([1, 1, 0], true)
             toggleClass([1, 0, 1], false)
-            toggleClass([1, 0, 0], false)
-            toggleClass([0, 1, 1], true)
+            toggleClass([1, 0, 0], true)
+            toggleClass([0, 1, 1], false)
             toggleClass([0, 1, 0], false)
-            toggleClass([0, 0, 1], false)
-            toggleClass([0, 0, 0], true)
+            toggleClass([0, 0, 1], true)
+            toggleClass([0, 0, 0], false)
 
-
-        //   if (
-        //       isActive(leftSibling) && // проверка первого правила для */
-        //       isActive(prevSelf) && // для rule 73 atlas.wolfram.com */
-        //       isActive(rightSibling)
-        //   ) {
-        //     setIsActive(target, false) // изменение состояния целевой(target) ячейки
-        // } else if ( // второе правило по аналогии с первым
-        //       isActive(leftSibling) &&
-        //       isActive(prevSelf) &&
-        //       !isActive(rightSibling)
-        //   ) {
-        //     setIsActive(target, true) // changing target state to active
-        // } else if (
-        //       isActive(leftSibling) &&
-        //       !isActive(prevSelf) &&
-        //       isActive(rightSibling)
-        //   ) {
-        //     setIsActive(target, false)
-        //   }
-      }
+   }
     }
+    //     //   if (
+    //     //       isActive(leftSibling) && // проверка первого правила для */
+    //     //       isActive(prevSelf) && // для rule 73 atlas.wolfram.com */
+    //     //       isActive(rightSibling)
+    //     //   ) {
+    //     //     setIsActive(target, false) // изменение состояния целевой(target) ячейки
+    //     // } else if ( // второе правило по аналогии с первым
+    //     //       isActive(leftSibling) &&
+    //     //       isActive(prevSelf) &&
+    //     //       !isActive(rightSibling)
+    //     //   ) {
+    //     //     setIsActive(target, true) // changing target state to active
+    //     // } else if (
+    //     //       isActive(leftSibling) &&
+    //     //       !isActive(prevSelf) &&
+    //     //       isActive(rightSibling)
+    //     //   ) {
+    //     //     setIsActive(target, false)
+    //     //   }
+    //   }
+    // }
 
     // рефакторинг_ФП)) напишем функцию, которая берет аргументами
     // ячейки и правило в виде бинарного массива
@@ -139,9 +146,9 @@
       }
     }
 
-    // сделаем заполнение страницы копией ряда с рандомом
-    //setInterval(duplicateRow, 100)
-    duplicateRow(600)
+    // // сделаем заполнение страницы копией ряда с рандомом
+    setInterval(duplicateRow, 1)
+    // //duplicateRow(600)
   </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 const canvas = document.getElementById('gameCanvas')// связываем id canas и  const canvas
 const ctx = canvas.getContext('2d') // для рисования канвасом исп ctx
-
+var abc = document.getElementById('btn')
 // ctx.beginPath()
 // ctx.rect(20, 40, 50, 50) //первые две это координаты вехнего левого угла, а вторые две это ширина и высота
 // ctx.fillStyle = "#FF0000" // цвет для метода заливки каваса fill
@@ -229,4 +229,8 @@ function draw() {
 requestAnimationFrame(draw)//заменяет собой setInterval передавая отрисовку канваса браузеру по усмотрению
 }
 
-draw()
+
+
+// console.log(abc.value)
+abc.innerHTML = 'sdfsdf'
+// draw()

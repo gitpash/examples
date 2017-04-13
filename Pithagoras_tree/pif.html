@@ -1,17 +1,20 @@
 <html>
   <head>
-    <title>Дерево Пифагора</title>
-    <script type="text/javascript">
+    <title>Pythagorean Tree</title>
+    <script>
       // функция рисует под углом angle линию из указанной точки длиной ln
       function drawLine(x, y, ln, angle) {
         context.moveTo(x, y);
         context.lineTo(Math.round(x + ln * Math.cos(angle)), Math.round(y - ln * Math.sin(angle)));
       }
-      // Функция рисует дерево
+      
+      
 
+// Функция рисует дерево
       function drawTree(x, y, ln, minLn, angle) {
         if (ln > minLn) {
-          ln = ln * 0.75;
+
+          ln = ln * 0.71;
           drawLine(x, y, ln, angle);
           x = Math.round(x + ln * Math.cos(angle));
           y = Math.round(y - ln * Math.sin(angle));
@@ -38,11 +41,16 @@
         drawTree(x, y, ln, minLn, Math.PI / 2);
         context.stroke();
       }
-
+      
       window.onload = init;
+      
     </script>
   </head>
   <body>
     <canvas id="tree"></canvas>
+  
+5% <input id="slide" type="range"
+ min="5" max="200" step="5" value="100"/>200%
+<br/>
   </body>
 </html>
