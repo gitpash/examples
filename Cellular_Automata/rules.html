@@ -82,14 +82,14 @@
                 rightSibling
               )
                   // 210
-            toggleClass([1, 1, 1], true)
+            toggleClass([1, 1, 1], false)
             toggleClass([1, 1, 0], true)
             toggleClass([1, 0, 1], false)
-            toggleClass([1, 0, 0], true)
-            toggleClass([0, 1, 1], false)
+            toggleClass([1, 0, 0], false)
+            toggleClass([0, 1, 1], true)
             toggleClass([0, 1, 0], false)
-            toggleClass([0, 0, 1], true)
-            toggleClass([0, 0, 0], false)
+            toggleClass([0, 0, 1], false)
+            toggleClass([0, 0, 0], true)
 
    }
     }
@@ -128,7 +128,7 @@
       let matchesRule =
         state(leftSibling) === rule[0] &&
         state(prevSelf) === rule[1] &&
-        state(rightSibling) == rule[2]
+        state(rightSibling) === rule[2]
       if(matchesRule)
           setIsActive(target, ruleValue)
     }
@@ -137,7 +137,7 @@
       return cellDiv.classList.contains('active') ? 1 : 0 // в зависимости от состояния возвращает 1 или 0
     }
     function setIsActive(cellDiv, isActive) {
-      if (!!isActive) {
+      if (isActive) {
         cellDiv.classList.remove('inactive')
         cellDiv.classList.add('active')
       } else {
