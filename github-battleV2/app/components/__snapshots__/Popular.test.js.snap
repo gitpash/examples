@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Popular snapshots 1`] = `
+<div>
+  <ul
+    className="languages"
+  >
+    <li
+      onClick={[Function]}
+      style={
+        Object {
+          "color": "#d0021b",
+        }
+      }
+    >
+      All
+    </li>
+    <li
+      onClick={[Function]}
+      style={null}
+    >
+      Javascript
+    </li>
+    <li
+      onClick={[Function]}
+      style={null}
+    >
+      Ruby
+    </li>
+    <li
+      onClick={[Function]}
+      style={null}
+    >
+      Java
+    </li>
+    <li
+      onClick={[Function]}
+      style={null}
+    >
+      CSS
+    </li>
+    <li
+      onClick={[Function]}
+      style={null}
+    >
+      Python
+    </li>
+  </ul>
+  <p
+    style={
+      Object {
+        "fontSize": "35px",
+        "textAlign": "center",
+      }
+    }
+  >
+    Loading
+  </p>
+</div>
+`;

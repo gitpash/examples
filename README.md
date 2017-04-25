@@ -1,1 +1,1 @@
-# examples
+# Code examples and some small react apps

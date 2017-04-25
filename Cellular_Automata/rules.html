@@ -1,28 +1,33 @@
 <html>
+
 <head>
   <style>
-
     .row div {
-        background-color: #99ff99;
-        display: inline-block;
-        height: 8px;
-        width: 8px;
-        /*margin: 0.1rem;*/
+      background-color: #99ff99;
+      display: inline-block;
+      height: 8px;
+      width: 8px;
+      /*margin: 0.1rem;*/
     }
-
-    .row div.active { /* создаем класс для активных клеток*/
+    
+    .row div.active {
+      /* создаем класс для активных клеток*/
       background-color: #8B7E66;
     }
-    .row div.inactive { /* создаем класс для НЕ-активных клеток*/
+    
+    .row div.inactive {
+      /* создаем класс для НЕ-активных клеток*/
       background-color: #8B3626;
     }
   </style>
 </head>
+
 <body>
   <div class="drawBlock">
-  <div class="automata"> <!--wrapper используем для добавления нового ряда к существующему -->
-    <div class="row"></div>
-  </div>
+    <div class="automata">
+      <!--wrapper используем для добавления нового ряда к существующему -->
+      <div class="row"></div>
+    </div>
   </div>
   <script>
     // функция рандомно возвращает 1 или 0
@@ -38,12 +43,12 @@
       let div = document.createElement('div')
       document.querySelector('.row').appendChild(div)
     }
-      // проходим всю длинну ряда и каждому блоку добавляем свойство 1 или 0
-      function randomizeRow(rowDiv) {
-        for (let i=0; i < rowDiv.childNodes.length; i++) {
-          let div = rowDiv.childNodes[i]
-          div.classList
-            .add(randomBinary() ? 'active' : 'inactive')
+    // проходим всю длинну ряда и каждому блоку добавляем свойство 1 или 0
+    function randomizeRow(rowDiv) {
+      for (let i = 0; i < rowDiv.childNodes.length; i++) {
+        let div = rowDiv.childNodes[i]
+        div.classList
+          .add(randomBinary() ? 'active' : 'inactive')
       }
     }
 
@@ -54,9 +59,9 @@
       let lastRow = allRows[allRows.length - 1]
       let clone = lastRow.cloneNode(true)
       document
-      .querySelector('.automata')
-      .appendChild(clone)
-    processRow(clone, lastRow)
+        .querySelector('.automata')
+        .appendChild(clone)
+      processRow(clone, lastRow)
 
     }
     // получает предыдущий ряд и текущий и связывает пред/центр/след клетки с соотв элементами ряда
@@ -66,32 +71,32 @@
         let prevSelf = parentRowDiv.childNodes[i]
         let leftSibling =
           prevSelf.previousElementSibling ||
-            parentRowDiv.childNodes[
-              parentRowDiv.childNodes.length - 1]
+          parentRowDiv.childNodes[
+          parentRowDiv.childNodes.length - 1]
         let rightSibling =
           prevSelf.nextElementSibling ||
-            parentRowDiv.childNodes[0]
-   
-            // правила // вспомогательная функция добавляющая // все аргумены, чтобы вызывать только rule
-            let toggleClass = setActiveIfMatchesRule
-              .bind(
-                null,
-                target,
-                leftSibling,
-                prevSelf,
-                rightSibling
-              )
-                  // 210
-            toggleClass([1, 1, 1], false)
-            toggleClass([1, 1, 0], true)
-            toggleClass([1, 0, 1], false)
-            toggleClass([1, 0, 0], false)
-            toggleClass([0, 1, 1], true)
-            toggleClass([0, 1, 0], false)
-            toggleClass([0, 0, 1], false)
-            toggleClass([0, 0, 0], true)
+          parentRowDiv.childNodes[0]
 
-   }
+        // правила // вспомогательная функция добавляющая // все аргумены, чтобы вызывать только rule
+        let toggleClass = setActiveIfMatchesRule
+          .bind(
+          null,
+          target,
+          leftSibling,
+          prevSelf,
+          rightSibling
+          )
+        // 210
+        toggleClass([1, 1, 1], false)
+        toggleClass([1, 1, 0], true)
+        toggleClass([1, 0, 1], false)
+        toggleClass([1, 0, 0], false)
+        toggleClass([0, 1, 1], true)
+        toggleClass([0, 1, 0], false)
+        toggleClass([0, 0, 1], false)
+        toggleClass([0, 0, 0], true)
+
+      }
     }
     //     //   if (
     //     //       isActive(leftSibling) && // проверка первого правила для */
@@ -129,8 +134,8 @@
         state(leftSibling) === rule[0] &&
         state(prevSelf) === rule[1] &&
         state(rightSibling) === rule[2]
-      if(matchesRule)
-          setIsActive(target, ruleValue)
+      if (matchesRule)
+        setIsActive(target, ruleValue)
     }
 
     function state(cellDiv) {
@@ -151,4 +156,5 @@
     // //duplicateRow(600)
   </script>
 </body>
+
 </html>
