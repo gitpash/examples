@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
-import Popular, { RepoGrid, SelectLanguage } from "./Popular";
+import Popular, { RepoGrid, SelectLanguage } from "../Popular";
 
 describe("Popular", () => {
   it("renders", () => {
