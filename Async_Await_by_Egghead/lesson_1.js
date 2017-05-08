@@ -1,3 +1,5 @@
+// Remember, Luke, every async function return a Promise!
+
 const fetch = require("node-fetch");
 
 function showGitUser(handle) {
